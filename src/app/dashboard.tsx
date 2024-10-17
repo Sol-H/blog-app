@@ -1,36 +1,51 @@
 "use client";
 import { useSession } from "next-auth/react"
 import { MdAddBox, MdEdit } from "react-icons/md";
-import { getBlogs, getBlog } from "./handleRequest";
+import { getBlogs } from "./handleRequest";
 import React, { useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
 
 
-function BlogPanel ( {title, content , date, blogLocationId}: {title: string, content: string, date: string, blogLocationId: string} ) {
+function BlogPanel({ title, content, date, blogLocationId }: { title: string, content: string, date: string, blogLocationId: string }) {
   date = new Date(date).toLocaleDateString('default', { year: 'numeric', month: 'long', day: 'numeric' });
   return (
     <div className="flex flex-col m-4 p-4 rounded-md content-between hover:cursor-pointer dark:bg-slate-800 dark:hover:bg-slate-700 bg-slate-400 hover:bg-slate-500" onClick={() => handleBlogClick(blogLocationId)}>
+      <div className="flex justify-between items-center">
         <h2 className="text-2xl m-1">{title}</h2>
-          <button className="text-gray-500 hover:text-gray-700 mb-auto absolute">
-            <MdEdit />
-            <span className="sr-only">Edit</span>
-          </button>
+        <button 
+          className="text-gray-500 hover:text-gray-700"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEditClick(blogLocationId);
+          }}
+        >
+          <MdEdit />
+          <span className="sr-only">Edit</span>
+        </button>
+      </div>
       <p className="m-1">{content}</p>
       <p className="m-1 text-sm dark:text-gray-500 text-gray-700 mt-auto">{date}</p>
     </div>
   )
 }
 
-async function handleBlogClick (blogLocationId: string) {
-  console.log(`Clicked on blog ${blogLocationId}`);
-  const blog = await getBlog(blogLocationId.toString());
-  console.log(blog);
+function handleEditClick(blogLocationId: string) {
+  window.location.href = `/edit/${blogLocationId}`;
+}
+
+async function handleBlogClick(blogLocationId: string) {
+  window.location.href = `/blog/${blogLocationId}`;
 }
 
 function CreateBlogPanel () {
+  const router = useRouter();
   return (
-    <div className="flex items-center justify-center m-auto p-4 hover:cursor-pointer rounded-md content-center dark:bg-green-900 dark:hover:bg-green-800 bg-green-700 hover:bg-green-800 text-white">
-        <MdAddBox className="text-6xl" />
-        <p className="text-2xl m-1">Create a blog</p>
+    <div 
+      className="flex items-center justify-center m-auto p-4 hover:cursor-pointer rounded-md content-center dark:bg-green-900 dark:hover:bg-green-800 bg-green-700 hover:bg-green-800 text-white"
+      onClick={() => router.push('/create')}
+    >
+      <MdAddBox className="text-6xl" />
+      <p className="text-2xl m-1">Create a blog</p>
     </div>
   )
 }

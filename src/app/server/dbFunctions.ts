@@ -1,21 +1,17 @@
-import client from './db';
+import db from './db';  // Adjust this import if necessary
 
-export const getBlogs = async (userEmail: string) => {
+export async function getBlogs() {
   try {
-    if (userEmail === '') {
-      throw new Error('User not authenticated');
-    }
-    const blogs = await client.db().collection('blogs').find({ userEmail }).toArray();
+    const client = await db;  // Use connect() instead of db()
+    const database = client.db();  // Get the database instance
+    const blogsCollection = database.collection('blogs');
+    
+    const blogs = await blogsCollection.find({}).toArray();
     return blogs;
   } catch (error) {
-    console.error('Error in getBlogs: ', error);
-    return [];
+    console.error('Error in getBlogs:', error);
+    throw error;
   }
-};
+}
 
-
-const dbFunctions = {
-  getBlogs,
-};
-
-export default dbFunctions;
+// ... rest of the file
