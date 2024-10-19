@@ -1,22 +1,18 @@
 import { NextResponse } from 'next/server';
-import { getBlogs } from "../../server/dbFunctions";
-import { authOptions } from "../auth/[...nextauth]/route";
-import { getServerSession } from "next-auth/next";
+import clientPromise from "@/app/server/db";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const userEmail = session.user?.email ?? '';
-
   try {
-    const blogs = await getBlogs(userEmail);
-    return NextResponse.json(blogs, { status: 200 });
+    const client = await clientPromise;
+    const db = client.db();
+    const blogsCollection = db.collection('blogs');
+    
+    const blogs = await blogsCollection.find({}).toArray();
+    
+    return NextResponse.json(blogs);
   } catch (error) {
-    console.error("Error fetching blogs: ", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    console.error('Error fetching blogs:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+

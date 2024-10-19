@@ -35,13 +35,16 @@ export async function POST(request: Request) {
     const lastBlog = await blogsCollection.findOne({}, { sort: { blogLocationId: -1 } });
     const newBlogLocationId = lastBlog ? lastBlog.blogLocationId + 1 : 1;
 
+    const user = await db.collection('users').findOne({ email: session.user.email });
+
     // Insert new blog metadata into MongoDB
     await blogsCollection.insertOne({
       blogLocationId: newBlogLocationId,
       blogTitle: title,
       blogDescription: content.split('\n')[0] + '...',
       date: new Date().toISOString(),
-      userEmail: session.user.email
+      userEmail: session.user.email,
+      userId: user?._id || null
     });
 
     // Upload blog content to S3

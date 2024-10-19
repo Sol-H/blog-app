@@ -1,3 +1,5 @@
+'use client';
+
 import { getBlog } from '../../handleRequest';
 import { marked } from 'marked';
 import Navbar from '../../navbar';

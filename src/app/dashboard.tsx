@@ -1,41 +1,43 @@
 "use client";
 import { useSession } from "next-auth/react"
-import { MdAddBox, MdEdit } from "react-icons/md";
-import { getBlogs } from "./handleRequest";
+import { MdAddBox } from "react-icons/md";
+import { deleteBlog, getBlogs } from "./handleRequest";
 import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
+import Link from 'next/link';
+import BlogPanel from '@/components/BlogPanel';
 
 
-function BlogPanel({ title, content, date, blogLocationId }: { title: string, content: string, date: string, blogLocationId: string }) {
-  date = new Date(date).toLocaleDateString('default', { year: 'numeric', month: 'long', day: 'numeric' });
-  return (
-    <div className="flex flex-col m-4 p-4 rounded-md content-between hover:cursor-pointer dark:bg-slate-800 dark:hover:bg-slate-700 bg-slate-400 hover:bg-slate-500" onClick={() => handleBlogClick(blogLocationId)}>
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl m-1">{title}</h2>
-        <button 
-          className="text-gray-500 hover:text-gray-700"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleEditClick(blogLocationId);
-          }}
-        >
-          <MdEdit />
-          <span className="sr-only">Edit</span>
-        </button>
-      </div>
-      <p className="m-1">{content}</p>
-      <p className="m-1 text-sm dark:text-gray-500 text-gray-700 mt-auto">{date}</p>
-    </div>
-  )
-}
+// function BlogPanel({ title, content, date, blogLocationId }: { title: string, content: string, date: string, blogLocationId: string }) {
+//   date = new Date(date).toLocaleDateString('default', { year: 'numeric', month: 'long', day: 'numeric' });
+//   return (
+//     <div className="flex flex-col m-4 p-4 rounded-md content-between hover:cursor-pointer dark:bg-slate-800 dark:hover:bg-slate-700 bg-slate-400 hover:bg-slate-500" onClick={() => handleBlogClick(blogLocationId)}>
+//       <div className="flex justify-between items-center">
+//         <h2 className="text-2xl m-1">{title}</h2>
+//         <button 
+//           className="text-gray-500 hover:text-gray-700"
+//           onClick={(e) => {
+//             e.stopPropagation();
+//             handleEditClick(blogLocationId);
+//           }}
+//         >
+//           <MdEdit />
+//           <span className="sr-only">Edit</span>
+//         </button>
+//       </div>
+//       <p className="m-1">{content}</p>
+//       <p className="m-1 text-sm dark:text-gray-500 text-gray-700 mt-auto">{date}</p>
+//     </div>
+//   )
+// }
 
-function handleEditClick(blogLocationId: string) {
-  window.location.href = `/edit/${blogLocationId}`;
-}
+// function handleEditClick(blogLocationId: string) {
+//   window.location.href = `/edit/${blogLocationId}`;
+// }
 
-async function handleBlogClick(blogLocationId: string) {
-  window.location.href = `/blog/${blogLocationId}`;
-}
+// async function handleBlogClick(blogLocationId: string) {
+//   window.location.href = `/blog/${blogLocationId}`;
+// }
 
 function CreateBlogPanel () {
   const router = useRouter();
@@ -71,18 +73,34 @@ export default function Dashboard() {
     fetchBlogs();
   }, [session]);
 
-  useEffect(() => {
-    console.log(blogs);
-  }, [blogs]);
+  const handleDeleteBlog = async (blogLocationId: string) => {
+    const success = await deleteBlog(blogLocationId);
+    if (success) {
+      setBlogs((prevBlogs) => prevBlogs ? prevBlogs.filter(blog => blog.blogLocationId.toString() !== blogLocationId) : null);
+    } else {
+      alert('Failed to delete blog. Please try again.');
+    }
+  };
 
   if (session) {
+    const username = session.user?.name?.replace(/\s+/g, '') || '';
     return (
       <div className="flex flex-col">
         <h1 className="text-3xl text-center mt-6 mb-10">{session.user?.name?.split(' ')[0]}&apos;s Blogs</h1>
+        <Link href={`/user/${username}`} className="text-center mb-4 text-blue-500 hover:text-blue-700">
+          View Public Page
+        </Link>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <CreateBlogPanel />
           {blogs && [...blogs].reverse().map((blog, index) => (
-            <BlogPanel key={index} title={blog.blogTitle} content={blog.blogDescription} date={blog.date} blogLocationId={blog.blogLocationId.toString()} />
+            <BlogPanel 
+              key={index} 
+              title={blog.blogTitle} 
+              content={blog.blogDescription} 
+              date={blog.date} 
+              blogLocationId={blog.blogLocationId.toString()} 
+              onDelete={handleDeleteBlog}
+            />
           ))}
         </div>
       </div>

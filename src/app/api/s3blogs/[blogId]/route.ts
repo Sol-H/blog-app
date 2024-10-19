@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
-// import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { S3Client } from '@aws-sdk/client-s3';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import clientPromise from "@/app/server/db";
-// import { ObjectId } from "mongodb";
 
 const s3 = new S3Client({
   credentials: {
@@ -23,19 +21,6 @@ export async function GET(
 
   const session = await getServerSession(authOptions);
   console.log("Server session:", session);
-
-  // Remove the session check temporarily
-  // if (!session) {
-  //   console.error("No server session found. User is not authenticated.");
-  //   return NextResponse.json({ error: "Unauthorized. Please log in." }, { status: 401 });
-  // }
-
-  // if (!session.user) {
-  //   console.error("Session found, but no user data present.");
-  //   return NextResponse.json({ error: "Invalid session. Please log in again." }, { status: 401 });
-  // }
-
-  // console.log("Authenticated user:", session.user.email);
 
   const blogId = params.blogId;
 
@@ -140,5 +125,54 @@ export async function PUT(
   } catch (error) {
     console.error('Error updating blog:', error);
     return NextResponse.json({ error: "Error updating blog" }, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { blogId: string } }
+) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized. Please log in." }, { status: 401 });
+  }
+
+  if (!session.user) {
+    return NextResponse.json({ error: "Invalid session. Please log in again." }, { status: 401 });
+  }
+
+  const blogId = params.blogId;
+
+  try {
+    const client = await clientPromise;
+    const db = client.db();
+    const blogsCollection = db.collection('blogs');
+
+    // Check if the blog belongs to the authenticated user
+    const blog = await blogsCollection.findOne({ 
+      blogLocationId: parseInt(blogId),
+      userEmail: session.user?.email
+    });
+
+    if (!blog) {
+      return NextResponse.json({ error: "Blog not found or you don't have permission to delete it" }, { status: 403 });
+    }
+
+    // Delete blog from MongoDB
+    await blogsCollection.deleteOne({ blogLocationId: parseInt(blogId) });
+
+    // Delete blog from S3
+    const command = new DeleteObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME!,
+      Key: `blogs/${blogId}.md`,
+    });
+
+    await s3.send(command);
+
+    return NextResponse.json({ message: "Blog deleted successfully" }, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting blog:', error);
+    return NextResponse.json({ error: "Error deleting blog" }, { status: 500 });
   }
 }

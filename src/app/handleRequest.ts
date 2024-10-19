@@ -77,3 +77,32 @@ export async function updateBlog(blogId: string, content: string, title: string)
     return false;
   }
 }
+
+export async function getBlogsByUsername(username: string) {
+  try {
+    const response = await fetch(`/api/blogs/${username}`);
+    if (!response.ok) {
+      // If the first attempt fails, try with spaces added
+      const responseWithSpaces = await fetch(`/api/blogs/${username.replace(/([a-z])([A-Z])/g, '$1 $2')}`);
+      if (!responseWithSpaces.ok) {
+        throw new Error('Failed to fetch blogs');
+      }
+      return await responseWithSpaces.json();
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching blogs by username:', error);
+    throw error;
+  }
+}
+
+export async function deleteBlog(blogId: string) {
+  console.log(`Deleting blog with id: ${blogId}`);
+  try {
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/s3blogs/${blogId}`);
+    return response.status === 200;
+  } catch (error) {
+    console.error('Error in deleteBlog: ', error);
+    return false;
+  }
+}
