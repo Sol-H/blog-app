@@ -1,5 +1,5 @@
 // import Image from "next/image";
-import Navbar from "./navbar";
+import Navbar from "@/components/navbar";
 import AccountMessage from "./accountMessage";
 import Dashboard from "./dashboard";
 

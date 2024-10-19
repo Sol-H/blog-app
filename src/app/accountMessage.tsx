@@ -1,11 +1,26 @@
 "use client";
 import { useSession } from "next-auth/react"
 
-export default function AccountMessage () {
-  const { data: session } = useSession()
+export default function AccountMessage() {
+  const { data: session, status } = useSession()
+
+  // Show loading state while session is being fetched
+  if (status === "loading") {
+    return (
+      <>
+        <div className="flex w-full items-center justify-center mt-10">
+          <div className="animate-pulse">
+            <div className="h-8 w-64 dark:bg-gray-800 bg-gray-300 rounded"></div>
+            <div className="h-4 w-48 dark:bg-gray-800 bg-gray-300 rounded mt-2 mx-auto"></div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   if (session) {
-    return(
-    <p>Signed in as {session.user?.name}</p>
+    return (
+      <p>Signed in as {session.user?.name}</p>
     )
   }
   else {

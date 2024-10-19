@@ -1,8 +1,8 @@
 "use client";
-import { useDarkToggle } from "./handleDarkMode";
+import { useDarkToggle } from "@/app/handleDarkMode";
 import { MdDarkMode, MdLightMode, MdStickyNote2 } from "react-icons/md";
 import { useEffect, useState } from "react";
-import LoginButton from "./loginButton";
+import LoginButton from "@/components/loginButton";
 
 interface NavLinkProps {
   text: string;

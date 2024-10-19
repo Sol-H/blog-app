@@ -7,38 +7,6 @@ import { useRouter } from "next/navigation";
 import Link from 'next/link';
 import BlogPanel from '@/components/BlogPanel';
 
-
-// function BlogPanel({ title, content, date, blogLocationId }: { title: string, content: string, date: string, blogLocationId: string }) {
-//   date = new Date(date).toLocaleDateString('default', { year: 'numeric', month: 'long', day: 'numeric' });
-//   return (
-//     <div className="flex flex-col m-4 p-4 rounded-md content-between hover:cursor-pointer dark:bg-slate-800 dark:hover:bg-slate-700 bg-slate-400 hover:bg-slate-500" onClick={() => handleBlogClick(blogLocationId)}>
-//       <div className="flex justify-between items-center">
-//         <h2 className="text-2xl m-1">{title}</h2>
-//         <button 
-//           className="text-gray-500 hover:text-gray-700"
-//           onClick={(e) => {
-//             e.stopPropagation();
-//             handleEditClick(blogLocationId);
-//           }}
-//         >
-//           <MdEdit />
-//           <span className="sr-only">Edit</span>
-//         </button>
-//       </div>
-//       <p className="m-1">{content}</p>
-//       <p className="m-1 text-sm dark:text-gray-500 text-gray-700 mt-auto">{date}</p>
-//     </div>
-//   )
-// }
-
-// function handleEditClick(blogLocationId: string) {
-//   window.location.href = `/edit/${blogLocationId}`;
-// }
-
-// async function handleBlogClick(blogLocationId: string) {
-//   window.location.href = `/blog/${blogLocationId}`;
-// }
-
 function CreateBlogPanel () {
   const router = useRouter();
   return (

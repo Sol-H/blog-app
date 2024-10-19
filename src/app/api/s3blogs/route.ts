@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     await blogsCollection.insertOne({
       blogLocationId: newBlogLocationId,
       blogTitle: title,
-      blogDescription: content.split('\n')[0] + '...',
+      blogDescription: content.replace(/#+/, '').split('\n')[2] + '...',
       date: new Date().toISOString(),
       userEmail: session.user.email,
       userId: user?._id || null

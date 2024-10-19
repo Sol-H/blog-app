@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import { createBlog } from '../handleRequest';
-import Navbar from '../navbar';
+import Navbar from "@/components/navbar";
 
 export default function CreateBlogPage() {
   const [content, setContent] = useState('');

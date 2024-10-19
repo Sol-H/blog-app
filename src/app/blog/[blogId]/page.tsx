@@ -2,7 +2,7 @@
 
 import { getBlog } from '../../handleRequest';
 import { marked } from 'marked';
-import Navbar from '../../navbar';
+import Navbar from "@/components/navbar";
 
 export default async function BlogPage({ params }: { params: { blogId: string } }) {
   console.log('BlogPage rendered with blogId:', params.blogId);

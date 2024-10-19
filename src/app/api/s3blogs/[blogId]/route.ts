@@ -98,12 +98,15 @@ export async function PUT(
     if (!blog) {
       return NextResponse.json({ error: "Blog not found or you don't have permission to edit it" }, { status: 403 });
     }
+
     const command = new PutObjectCommand({
       Bucket: process.env.AWS_BUCKET_NAME!,
       Key: `blogs/${blogId}.md`,
       Body: content,
     });
 
+
+    
     await s3.send(command);
 
     const result = await blogsCollection.updateOne(
@@ -111,7 +114,7 @@ export async function PUT(
       { 
         $set: { 
           blogTitle: title,
-          blogDescription: content.split('\n')[2] + '...',
+          blogDescription: content.replace(/#+/, '').split('\n')[2] + '...',
           date: new Date().toISOString()
         } 
       }

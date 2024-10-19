@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server';
 import clientPromise from "@/app/server/db";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function GET() {
   try {
     const client = await clientPromise;
     const db = client.db();
     const blogsCollection = db.collection('blogs');
-    
-    const blogs = await blogsCollection.find({}).toArray();
+    const session = await getServerSession(authOptions);
+    const blogs = await blogsCollection.find({userEmail: session?.user?.email}).toArray();
     
     return NextResponse.json(blogs);
   } catch (error) {

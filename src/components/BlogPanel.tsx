@@ -36,7 +36,7 @@ export default function BlogPanel({ title, content, date, blogLocationId, showEd
         <div className="flex justify-between">
           {showEditButton && (
             <button 
-              className="text-gray-500 hover:text-gray-700 mr-2 p-1"
+              className="text-gray-500 hover:text-gray-400 mr-2 p-1"
               onClick={handleEditClick}
             >
               <MdEdit size={20} />

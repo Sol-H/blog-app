@@ -27,9 +27,7 @@ export async function getBlog(blogId: string) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
-    const response = await axios.get(`${baseUrl}/api/s3blogs/${blogId}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${baseUrl}/api/s3blogs/${blogId}`);
 
     console.log('API response:', response.data);
     if (response.data && response.data.content) {
@@ -43,11 +41,7 @@ export async function getBlog(blogId: string) {
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      if (error.response?.status === 401) {
-        console.error('Unauthorized: Access token might be invalid or expired.');
-      } else {
-        console.error(`Error in getBlog: ${error.message}`);
-      }
+      console.error(`Error in getBlog: ${error.message}`);
       console.error('Full error object:', error);
     } else {
       console.error('Unexpected error in getBlog:', error);

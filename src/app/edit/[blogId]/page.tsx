@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import { getBlog, updateBlog } from '../../handleRequest';
-import Navbar from '../../navbar';
+import Navbar from "@/components/navbar";
 
 export default function EditBlogPage({ params }: { params: { blogId: string } }) {
   const [content, setContent] = useState('');
