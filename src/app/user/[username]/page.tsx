@@ -36,19 +36,23 @@ export default function UserPublicPage({ params }: { params: { username: string 
   return (
     <div className="flex flex-col">
       <Navbar />
-      <h1 className="text-3xl text-center mt-6 mb-10">{username}&apos;s Blogs</h1>
+      <h1 className="text-3xl text-center mt-6 mb-10">{username.replace(/%20/g, ' ')}&apos;s Blogs</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {blogs && [...blogs].reverse().map((blog, index) => (
-          <BlogPanel 
-            key={index} 
-            title={blog.blogTitle} 
-            content={blog.blogDescription} 
-            date={blog.date} 
-            blogLocationId={blog.blogLocationId.toString()} 
-            showDeleteButton={false}
-            showEditButton={false}
-          />
-        ))}
+        {blogs && blogs.length > 0 ? (
+          [...blogs].reverse().map((blog, index) => (
+            <BlogPanel 
+              key={index} 
+              title={blog.blogTitle} 
+              content={blog.blogDescription} 
+              date={blog.date} 
+              blogLocationId={blog.blogLocationId.toString()} 
+              showDeleteButton={false}
+              showEditButton={false}
+            />
+          ))
+        ) : (
+          <p className="col-span-full text-center text-gray-500 mt-4">No blogs found for this user.</p>
+        )}
       </div>
     </div>
   );

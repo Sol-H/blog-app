@@ -75,14 +75,6 @@ export async function updateBlog(blogId: string, content: string, title: string)
 export async function getBlogsByUsername(username: string) {
   try {
     const response = await fetch(`/api/blogs/${username}`);
-    if (!response.ok) {
-      // If the first attempt fails, try with spaces added
-      const responseWithSpaces = await fetch(`/api/blogs/${username.replace(/([a-z])([A-Z])/g, '$1 $2')}`);
-      if (!responseWithSpaces.ok) {
-        throw new Error('Failed to fetch blogs');
-      }
-      return await responseWithSpaces.json();
-    }
     return await response.json();
   } catch (error) {
     console.error('Error fetching blogs by username:', error);
@@ -98,5 +90,21 @@ export async function deleteBlog(blogId: string) {
   } catch (error) {
     console.error('Error in deleteBlog: ', error);
     return false;
+  }
+}
+
+export async function getUsers() {
+  try {
+    const response = await axios.get('/api/users');
+    console.log(`returning data: ${response.data.length} users`);
+    return response.data.map((user: any) => ({
+      _id: user._id.toString(),
+      username: user.username as string,
+      name: user.name as string,
+      email: user.email as string
+    }));
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
   }
 }

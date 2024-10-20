@@ -51,7 +51,7 @@ export default function Dashboard() {
   };
 
   if (session) {
-    const username = session.user?.name?.replace(/\s+/g, '') || '';
+    const username = session.user?.username || '';
     return (
       <div className="flex flex-col">
         <h1 className="text-3xl text-center mt-6 mb-10">{session.user?.name?.split(' ')[0]}&apos;s Blogs</h1>

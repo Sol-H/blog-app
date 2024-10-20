@@ -9,14 +9,14 @@ export async function GET(
   let { username } = params;
 
   username = username.replace(/%20/g, ' ');
-  console.log(username);
+  console.log('/blogs/username:', username);
 
   try {
     const client = await clientPromise;
     const db = client.db();
 
     // First, find the user by username
-    const user = await db.collection('users').findOne({ name: username });
+    const user = await db.collection('users').findOne({ username: username });
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
