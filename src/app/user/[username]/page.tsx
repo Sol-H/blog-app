@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getBlogsByUsername } from '@/app/handleRequest';
-import BlogPanel from '@/components/BlogPanel';
+import { getBlogsByUsername } from '@/lib/handleRequest';
+import BlogCard from '@/components/BlogCard';
 import Navbar from "@/components/navbar";
 
 
@@ -40,7 +40,7 @@ export default function UserPublicPage({ params }: { params: { username: string 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {blogs && blogs.length > 0 ? (
           [...blogs].reverse().map((blog, index) => (
-            <BlogPanel 
+            <BlogCard 
               key={index} 
               title={blog.blogTitle} 
               content={blog.blogDescription} 

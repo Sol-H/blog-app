@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
-import { getBlog, updateBlog } from '../../handleRequest';
+import { getBlog, updateBlog } from '../../../lib/handleRequest';
 import Navbar from "@/components/navbar";
 
 export default function EditBlogPage({ params }: { params: { blogId: string } }) {

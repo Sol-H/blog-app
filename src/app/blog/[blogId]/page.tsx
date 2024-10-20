@@ -1,6 +1,6 @@
 'use client';
 
-import { getBlog } from '../../handleRequest';
+import { getBlog } from '../../../lib/handleRequest';
 import { marked } from 'marked';
 import Navbar from "@/components/navbar";
 

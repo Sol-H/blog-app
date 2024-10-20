@@ -1,7 +1,7 @@
 import React from 'react';
 import { MdEdit, MdDelete } from "react-icons/md";
 
-interface BlogPanelProps {
+interface BlogCardProps {
   title: string;
   content: string;
   date: string;
@@ -11,7 +11,7 @@ interface BlogPanelProps {
   showDeleteButton?: boolean;
 }
 
-export default function BlogPanel({ title, content, date, blogLocationId, showEditButton = true, onDelete, showDeleteButton = true }: BlogPanelProps) {
+export default function BlogCard({ title, content, date, blogLocationId, showEditButton = true, onDelete, showDeleteButton = true }: BlogCardProps) {
   const formattedDate = new Date(date).toLocaleDateString('default', { year: 'numeric', month: 'long', day: 'numeric' });
 
   const handleEditClick = (e: React.MouseEvent) => {

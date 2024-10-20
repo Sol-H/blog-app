@@ -3,7 +3,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { S3Client } from '@aws-sdk/client-s3';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import clientPromise from "@/app/server/db";
+import clientPromise from "@/lib/db";
 
 const s3 = new S3Client({
   credentials: {

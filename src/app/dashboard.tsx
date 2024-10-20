@@ -1,11 +1,11 @@
 "use client";
 import { useSession } from "next-auth/react"
 import { MdAddBox } from "react-icons/md";
-import { deleteBlog, getBlogs } from "./handleRequest";
+import { deleteBlog, getBlogs } from "../lib/handleRequest";
 import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import BlogPanel from '@/components/BlogPanel';
+import BlogCard from '@/components/BlogCard';
 
 function CreateBlogPanel () {
   const router = useRouter();
@@ -61,7 +61,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <CreateBlogPanel />
           {blogs && [...blogs].reverse().map((blog, index) => (
-            <BlogPanel 
+            <BlogCard 
               key={index} 
               title={blog.blogTitle} 
               content={blog.blogDescription} 
