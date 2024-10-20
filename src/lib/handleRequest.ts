@@ -95,7 +95,7 @@ export async function deleteBlog(blogId: string) {
 
 export async function getUsers() {
   try {
-    const response = await axios.get('/api/users');
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users`);
     console.log(`returning data: ${response.data.length} users`);
     return response.data.map((user: any) => ({
       _id: user._id.toString(),

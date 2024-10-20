@@ -1,6 +1,5 @@
 "use client";
 import { useSession } from "next-auth/react"
-import UserList from "@/components/UserList";
 
 export default function AccountMessage() {
   const { data: session, status } = useSession()
@@ -38,7 +37,6 @@ export default function AccountMessage() {
         
       </div>
       <p>Sign in to get started.</p>
-      <UserList />
       </>
     )
   }

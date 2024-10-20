@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import { getBlog, updateBlog } from '../../../lib/handleRequest';
-import Navbar from "@/components/navbar";
 
 export default function EditBlogPage({ params }: { params: { blogId: string } }) {
   const [content, setContent] = useState('');
@@ -68,7 +67,6 @@ export default function EditBlogPage({ params }: { params: { blogId: string } })
   if (isLoading) {
     return (
       <>
-        <Navbar />
         <div className="container mx-auto mt-8 px-4">
           <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: "Loading..." }} />
         </div>
@@ -79,7 +77,6 @@ export default function EditBlogPage({ params }: { params: { blogId: string } })
   if (error) {
     return (
       <div className="flex flex-col">
-        <Navbar />
         <div className="container mx-auto mt-8 px-4">
           <h1 className="text-2xl font-bold mb-4">Error</h1>
           <p>{error}</p>
@@ -90,7 +87,6 @@ export default function EditBlogPage({ params }: { params: { blogId: string } })
 
   return (
     <div className="flex flex-col">
-      <Navbar />
       <div className="container mx-auto mt-8 px-4">
         <h1 className="text-2xl font-bold mb-4">Edit Blog</h1>
         <form onSubmit={handleSubmit}>

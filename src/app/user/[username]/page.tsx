@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react';
 import { getBlogsByUsername } from '@/lib/handleRequest';
 import BlogCard from '@/components/BlogCard';
-import Navbar from "@/components/navbar";
-
 
 // Define the shape of a blog object
 interface Blog {
@@ -35,7 +33,6 @@ export default function UserPublicPage({ params }: { params: { username: string 
 
   return (
     <div className="flex flex-col">
-      <Navbar />
       <h1 className="text-3xl text-center mt-6 mb-10">{username.replace(/%20/g, ' ')}&apos;s Blogs</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {blogs && blogs.length > 0 ? (

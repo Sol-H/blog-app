@@ -3,6 +3,7 @@ import { useDarkToggle } from "@/lib/handleDarkMode";
 import { MdDarkMode, MdLightMode, MdStickyNote2 } from "react-icons/md";
 import { useEffect, useState } from "react";
 import LoginButton from "@/components/loginButton";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface NavLinkProps {
   text: string;
@@ -42,11 +43,13 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="p-4">
+    <nav className="p-4 w-full">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="grid grid-cols-3 grid-rows-1">
-          <div className="flex justify-end pr-2"><MdStickyNote2 className="h-full w-max right-0 dark:text-gray-300 text-gray-900" /></div>
-          <div className="text-lg font-bold col-span-2 hover:cursor-pointer" onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/`}>SolBlog</div>
+        <div className="flex items-center">
+          <SidebarTrigger />
+          <div className="grid grid-cols-3 grid-rows-1 ml-4">
+            <div className="text-lg font-bold col-span-2 hover:cursor-pointer" onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/`}>SolBlog</div>
+          </div>
         </div>
         <div className="flex space-x-2 md:space-x-4">
           <NavLink href={`${process.env.NEXT_PUBLIC_API_URL}/`} classes="scale-0 md:scale-100" text="Home" />

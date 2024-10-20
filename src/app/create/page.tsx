@@ -3,7 +3,16 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import { createBlog } from '../../lib/handleRequest';
-import Navbar from "@/components/navbar";
+import LoginButton from "@/components/loginButton";
+
+function SignInMessage() {
+  return (
+    <div className="flex flex-col items-center justify-center mt-8">
+      <p className="text-xl mb-4">Please sign in to create a blog.</p>
+      <LoginButton />
+    </div>
+  );
+}
 
 export default function CreateBlogPage() {
   const [content, setContent] = useState('');
@@ -11,18 +20,12 @@ export default function CreateBlogPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-
-    if (!session) {
-      setError("You must be signed in to create a blog.");
-      setIsLoading(false);
-      return;
-    }
 
     const formattedContent = `# ${title}\n\n${content}`;
 
@@ -39,9 +42,16 @@ export default function CreateBlogPage() {
     setIsLoading(false);
   };
 
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session) {
+    return <SignInMessage />;
+  }
+
   return (
     <div className="flex flex-col">
-      <Navbar />
       <div className="container mx-auto mt-8 px-4">
         <h1 className="text-2xl font-bold mb-4">Create a New Blog</h1>
         <form onSubmit={handleSubmit}>
