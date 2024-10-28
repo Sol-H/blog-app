@@ -32,7 +32,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
-  const users = await getUsers();
+  let users = [];
+  try {
+    users = await getUsers();
+  } catch (error) {
+    console.error('Error fetching users in layout:', error);
+  }
 
   return (
     <html lang="en" className="dark">
