@@ -5,6 +5,9 @@ import GoogleProvider from "next-auth/providers/google"
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import type { Adapter } from "next-auth/adapters";
 import clientPromise from "@/lib/db";
+import type { Session } from 'next-auth'
+import type { User } from 'next-auth'
+import type { Account } from 'next-auth'
 
 export const authOptions = {
   adapter: MongoDBAdapter(clientPromise) as Adapter,
@@ -19,13 +22,13 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }: { user: any; account: any; profile: any }) {
+    async signIn({ user, account }: { user: User; account: Account }) {
       if (account?.provider === "google" || account?.provider === "github") {
         const client = await clientPromise;
         const db = client.db();
         const usersCollection = db.collection("users");
 
-        let username = user.name?.toLowerCase().replace(/\s+/g, '') || '';
+        const username = user.name?.toLowerCase().replace(/\s+/g, '') || '';
         let uniqueUsername = username;
         let counter = 1;
 
@@ -44,7 +47,10 @@ export const authOptions = {
       }
       return true;
     },
-    async session({ session, user }: { session: any; user: any }) {
+    async session({ session, user }: { 
+      session: { user?: { username?: string } & User } & Session; 
+      user: User & { username?: string }
+    }) {
       if (session.user) {
         session.user.username = user.username;
       }

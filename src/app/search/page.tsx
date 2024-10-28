@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-//import { useRouter } from 'next/navigation';
 import BlogCard from '@/components/BlogCard';
 
 interface SearchResult {
@@ -23,14 +22,7 @@ export default function SearchPage() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Perform initial search if URL has a query parameter
-  useEffect(() => {
-    if (initialSearchTerm) {
-      handleSearch(initialSearchTerm);
-    }
-  }, [initialSearchTerm]);
-
-  const handleSearch = async (term: string = inputValue) => {
+  const handleSearch = useCallback(async (term: string) => {
     if (!term.trim()) return;
 
     setSearchTerm(term);
@@ -46,11 +38,21 @@ export default function SearchPage() {
     } finally {
       setIsLoading(false);
     }
+  }, [router]);
+
+  useEffect(() => {
+    if (initialSearchTerm) {
+      handleSearch(initialSearchTerm);
+    }
+  }, [initialSearchTerm, handleSearch]);
+
+  const handleSearchClick = () => {
+    handleSearch(inputValue);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleSearch();
+      handleSearch(inputValue);
     }
   };
 
@@ -63,12 +65,12 @@ export default function SearchPage() {
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
             placeholder="Search for blogs..."
             className="flex-1 p-2 border rounded dark:bg-slate-800 dark:border-slate-600"
           />
           <button
-            onClick={() => handleSearch()}
+            onClick={handleSearchClick}
             disabled={isLoading}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-blue-300"
           >
@@ -90,12 +92,18 @@ export default function SearchPage() {
                   showDeleteButton={false}
                   showEditButton={false}
                 />
-                <a
-                  href={`/user/${result.username}`}
-                  className="text-blue-500 hover:text-blue-700 text-center mt-2"
-                >
-                  by {result.username}
-                </a>
+                {result.username !== 'Unknown User' ? (
+                  <a
+                    href={`/user/${result.username}`}
+                    className="text-blue-500 hover:text-blue-700 text-center mt-2"
+                  >
+                    by {result.username}
+                  </a>
+                ) : (
+                  <span className="text-gray-500 text-center mt-2">
+                    by {result.username}
+                  </span>
+                )}
               </div>
             ))}
           </div>
