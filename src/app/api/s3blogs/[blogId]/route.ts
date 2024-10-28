@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { S3Client } from '@aws-sdk/client-s3';
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/auth.config";
 import clientPromise from "@/lib/db";
 
 const s3 = new S3Client({
