@@ -21,7 +21,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "BlogApp",
+  title: "SolBlog",
   description: "Create and read blogs!",
 };
 
