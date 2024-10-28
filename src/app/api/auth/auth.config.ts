@@ -22,6 +22,26 @@ export const authOptions: NextAuthOptions = {
       allowDangerousEmailAccountLinking: true,
     }),
   ],
+  cookies: {
+    pkceCodeVerifier: {
+      name: 'next-auth.pkce.code_verifier',
+      options: {
+        httpOnly: true,
+        sameSite: 'none',
+        path: '/',
+        secure: true
+      }
+    },
+    state: {
+      name: 'next-auth.state',
+      options: {
+        httpOnly: true,
+        sameSite: 'none',
+        path: '/',
+        secure: true
+      }
+    }
+  },
   callbacks: {
     async signIn({ user, account }: { user: User; account: Account | null }) {
       if (account?.provider === "google" || account?.provider === "github") {
