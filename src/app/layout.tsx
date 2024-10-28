@@ -8,6 +8,7 @@ import Navbar from "@/components/navbar";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/auth.config";
 import { getUsers } from "@/lib/handleRequest";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -46,6 +47,7 @@ export default async function RootLayout({
                 <Navbar />
                 <main className="container mx-auto px-4">
                   {children}
+                  <Analytics />
                 </main>
               </div>
             </div>
