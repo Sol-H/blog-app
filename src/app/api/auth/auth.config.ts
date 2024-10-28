@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
         const db = client.db();
         const usersCollection = db.collection("users");
 
-        const username = user.name?.toLowerCase().replace(/\s+/g, '') || '';
+        const username = (user.name?.toLowerCase().replace(/\s+/g, '') || user.email?.split('@')[0]) ?? 'user';
         let uniqueUsername = username;
         let counter = 1;
 
