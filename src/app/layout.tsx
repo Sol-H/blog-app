@@ -7,7 +7,6 @@ import { AppSidebar } from "@/components/app-sidebar";
 import Navbar from "@/components/navbar";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/auth.config";
-import { getUsers } from "@/lib/handleRequest";
 import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = localFont({
@@ -32,12 +31,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
-  let users = [];
-  try {
-    users = await getUsers();
-  } catch (error) {
-    console.error('Error fetching users in layout:', error);
-  }
 
   return (
     <html lang="en" className="dark">
@@ -47,7 +40,7 @@ export default async function RootLayout({
         <SessionProviderWrapper session={session}>
           <SidebarProvider>
             <div className="flex h-screen w-full">
-              <AppSidebar session={session} users={users} />
+              <AppSidebar session={session} />
               <div className="flex-1 overflow-auto">
                 <Navbar />
                 <main className="container mx-auto px-4">

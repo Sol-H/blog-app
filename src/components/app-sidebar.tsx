@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Home, Edit, Users, Search, Settings, LogIn, ChevronDown } from "lucide-react";
 import {
   Sidebar,
@@ -18,6 +18,7 @@ import {
 import LoginButton from "@/components/loginButton";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Session } from "next-auth";
+import { getUsers } from '@/lib/handleRequest';
 
 // Menu items
 const items = [
@@ -56,8 +57,22 @@ interface User {
   email: string;
 }
 
-export function AppSidebar({ session, users = [] }: { session: Session | null; users?: User[] }) {
+export function AppSidebar({ session }: { session: Session | null }) {
+  const [users, setUsers] = useState<User[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const fetchedUsers = await getUsers();
+        setUsers(fetchedUsers);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        setUsers([]);
+      }
+    }
+    fetchUsers();
+  }, []);
 
   return (
     <Sidebar>

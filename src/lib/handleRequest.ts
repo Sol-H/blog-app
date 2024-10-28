@@ -95,7 +95,6 @@ export async function deleteBlog(blogId: string) {
 export async function getUsers() {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
-      cache: 'force-cache', // This enables caching to prevent infinite loops
     });
     
     if (!response.ok) {
