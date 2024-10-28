@@ -1,49 +1,46 @@
 import axios from "axios";
 import type { Session } from "next-auth";
 
-// Add this interface at the top of the file or in a separate types file
-interface User {
-  _id: { toString(): string };
-  username: string;
-  name: string;
-  email: string;
-}
+// Create an axios instance with default configuration
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL || '',
+  timeout: 10000, // 10 seconds
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 export async function getBlogs(session: Session) {
-  if (session) {
-    try {
-      const response = await axios.get('/api/blogs');
-      return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error('Error in getBlogs: ', error.message);
-        if (error.response?.status === 405) {
-          console.error('Method Not Allowed: Please check the HTTP method used.');
-        }
-      } else {
-        console.error('Unexpected error in getBlogs: ', error);
+  if (!session) return [];
+  
+  try {
+    const response = await api.get('/api/blogs');
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Error in getBlogs:', error.message);
+      if (error.response?.status === 405) {
+        console.error('Method Not Allowed: Please check the HTTP method used.');
       }
-      return [];
+    } else {
+      console.error('Unexpected error in getBlogs:', error);
     }
+    return [];
   }
-  return [];
 }
 
 export async function getBlog(blogId: string) {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
-
-    const response = await axios.get(`${baseUrl}/api/s3blogs/${blogId}`);
-
+    const response = await api.get(`/api/s3blogs/${blogId}`);
+    
     if (response.data && response.data.content) {
       return {
         content: response.data.content,
         userEmail: response.data.userEmail,
         blogTitle: response.data.blogTitle
       };
-    } else {
-      throw new Error('Invalid blog data received');
     }
+    throw new Error('Invalid blog data received');
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(`Error in getBlog: ${error.message}`);
@@ -97,15 +94,18 @@ export async function deleteBlog(blogId: string) {
 
 export async function getUsers() {
   try {
-    const response = await axios.get<User[]>(`${process.env.NEXT_PUBLIC_API_URL}/api/users`);
-    return response.data.map((user) => ({
-      _id: user._id.toString(),
-      username: user.username,
-      name: user.name,
-      email: user.email
-    }));
+    const response = await api.get('/api/users');
+    return response.data;
   } catch (error) {
-    console.error('Error fetching users:', error);
+    if (axios.isAxiosError(error)) {
+      console.error('Error fetching users:', error.message);
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', error.response.data);
+      }
+    } else {
+      console.error('Unexpected error:', error);
+    }
     return [];
   }
 }
