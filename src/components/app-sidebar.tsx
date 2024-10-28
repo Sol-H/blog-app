@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Home, Edit, Users, Search, Settings, LogIn, ChevronDown } from "lucide-react";
 import {
   Sidebar,
@@ -61,8 +61,9 @@ export function AppSidebar({ session }: { session: Session | null }) {
   const [users, setUsers] = useState<User[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    async function fetchUsers() {
+  // Add new function to handle dropdown click
+  const handleDropdownClick = async (open: boolean) => {
+    if (open) {
       try {
         const fetchedUsers = await getUsers();
         setUsers(fetchedUsers);
@@ -71,8 +72,8 @@ export function AppSidebar({ session }: { session: Session | null }) {
         setUsers([]);
       }
     }
-    fetchUsers();
-  }, []);
+    setIsOpen(open);
+  };
 
   return (
     <Sidebar>
@@ -98,7 +99,11 @@ export function AppSidebar({ session }: { session: Session | null }) {
                 )
               ))}
               
-              <Collapsible open={isOpen} onOpenChange={setIsOpen} className="group/collapsible" >
+              <Collapsible 
+                open={isOpen} 
+                onOpenChange={handleDropdownClick} 
+                className="group/collapsible"
+              >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="flex items-center justify-between space-x-2 px-3 py-2 rounded-md transition-colors w-full hover:!bg-slate-300 dark:hover:!bg-slate-700">
