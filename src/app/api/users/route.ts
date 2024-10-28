@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 import clientPromise from "@/lib/db";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function GET() {
   try {
@@ -9,7 +7,6 @@ export async function GET() {
     const db = client.db();
     const usersCollection = db.collection('users');
     const users = await usersCollection.find({}).toArray();
-    console.log(users);
     return NextResponse.json(users);
   } catch (error) {
     console.error('Error fetching users:', error);

@@ -1,6 +1,6 @@
 "use client";
 import { useDarkToggle } from "@/lib/handleDarkMode";
-import { MdDarkMode, MdLightMode, MdStickyNote2 } from "react-icons/md";
+import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { useEffect, useState } from "react";
 import LoginButton from "@/components/loginButton";
 import { SidebarTrigger } from "@/components/ui/sidebar";

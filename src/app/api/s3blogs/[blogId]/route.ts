@@ -17,10 +17,6 @@ export async function GET(
   request: Request,
   { params }: { params: { blogId: string } }
 ) {
-  console.log("Attempting to fetch blog with ID:", params.blogId);
-
-  const session = await getServerSession(authOptions);
-  console.log("Server session:", session);
 
   const blogId = params.blogId;
 
@@ -67,7 +63,6 @@ export async function PUT(
   console.log("Attempting to update blog with ID:", params.blogId);
 
   const session = await getServerSession(authOptions);
-  console.log("Server session:", session);
 
   if (!session) {
     console.error("No server session found. User is not authenticated.");
@@ -78,8 +73,6 @@ export async function PUT(
     console.error("Session found, but no user data present.");
     return NextResponse.json({ error: "Invalid session. Please log in again." }, { status: 401 });
   }
-
-  console.log("Authenticated user:", session.user.email);
 
   const blogId = params.blogId;
   const { content, title } = await request.json();

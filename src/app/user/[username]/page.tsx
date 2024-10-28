@@ -19,10 +19,7 @@ export default function UserPublicPage({ params }: { params: { username: string 
   useEffect(() => {
     async function fetchBlogs() {
       try {
-        // The username in the URL might not have spaces, but the one in the database might
-        // So we need to fetch blogs for both possibilities
         const fetchedBlogs = await getBlogsByUsername(username);
-        console.log(fetchedBlogs);
         setBlogs(fetchedBlogs);
       } catch (error) {
         console.error('Error fetching blogs:', error);

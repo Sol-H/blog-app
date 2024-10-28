@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 import LoginButton from "@/components/loginButton";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Session } from "next-auth";
 
 // Menu items
 const items = [
@@ -33,12 +34,12 @@ const items = [
   },
   {
     title: "Search",
-    url: "#",
+    url: "/search",
     icon: Search,
   },
   {
     title: "Settings",
-    url: "#",
+    url: "/settings",
     icon: Settings,
   },
   {
@@ -48,8 +49,15 @@ const items = [
   },
 ];
 
-export function AppSidebar({ session, users = [] }: { session: any, users?: any[] }) {
-  const [isOpen, setIsOpen] = useState(true);
+interface User {
+  _id: { toString(): string };
+  username: string;
+  name: string;
+  email: string;
+}
+
+export function AppSidebar({ session, users = [] }: { session: Session | null; users?: User[] }) {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Sidebar>
@@ -89,7 +97,7 @@ export function AppSidebar({ session, users = [] }: { session: any, users?: any[
                   <CollapsibleContent>
                     <SidebarMenuSub>
                       {users.length > 0 ? (
-                        users.map((user: any) => (
+                        users.map((user: User) => (
                           <SidebarMenuSubItem key={user.username}>
                             <a href={`/user/${user.username}`} className="block px-3 py-2 rounded-md dark:hover:bg-slate-700 hover:bg-slate-300 transition-colors">
                               {user.username}

@@ -9,7 +9,6 @@ export async function GET(
   let { username } = params;
 
   username = username.replace(/%20/g, ' ');
-  console.log('/blogs/username:', username);
 
   try {
     const client = await clientPromise;
@@ -27,8 +26,6 @@ export async function GET(
       .find({ userId: new ObjectId(user._id) })
       .sort({ date: -1 })
       .toArray();
-
-    console.log(blogs);
 
     // Map the blogs to the expected format
     const formattedBlogs = blogs.map(blog => ({

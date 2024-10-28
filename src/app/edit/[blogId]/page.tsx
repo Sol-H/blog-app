@@ -23,9 +23,7 @@ export default function EditBlogPage({ params }: { params: { blogId: string } })
       }
 
       try {
-        console.log('Fetching blog with ID:', params.blogId);
         const blogData = await getBlog(params.blogId);
-        console.log('Received blog data:', blogData);
 
         if (!blogData) {
           setError("Blog not found");
@@ -34,8 +32,6 @@ export default function EditBlogPage({ params }: { params: { blogId: string } })
         }
 
         if (blogData.userEmail !== session.user?.email) {
-          console.log('User email:', session.user?.email);
-          console.log('Blog user email:', blogData.userEmail);
           setError("You don't have permission to edit this blog.");
           setIsLoading(false);
           return;
@@ -45,7 +41,6 @@ export default function EditBlogPage({ params }: { params: { blogId: string } })
         setContent(blogData.content);
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching blog:', error);
         setError("An error occurred while fetching the blog.");
         setIsLoading(false);
       }

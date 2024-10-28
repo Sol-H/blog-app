@@ -1,11 +1,18 @@
 import axios from "axios";
 import type { Session } from "next-auth";
 
+// Add this interface at the top of the file or in a separate types file
+interface User {
+  _id: { toString(): string };
+  username: string;
+  name: string;
+  email: string;
+}
+
 export async function getBlogs(session: Session) {
   if (session) {
     try {
       const response = await axios.get('/api/blogs');
-      console.log(`returning data: ${response.data.length} blogs`);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -23,13 +30,11 @@ export async function getBlogs(session: Session) {
 }
 
 export async function getBlog(blogId: string) {
-  console.log(`Fetching blog with id: ${blogId}`);
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
     const response = await axios.get(`${baseUrl}/api/s3blogs/${blogId}`);
 
-    console.log('API response:', response.data);
     if (response.data && response.data.content) {
       return {
         content: response.data.content,
@@ -51,7 +56,6 @@ export async function getBlog(blogId: string) {
 }
 
 export async function createBlog(content: string, title: string) {
-  console.log(`Creating blog with title: ${title}`);
   try {
     const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/s3blogs`, { content, title });
     return response.data.blogId;
@@ -62,7 +66,6 @@ export async function createBlog(content: string, title: string) {
 }
 
 export async function updateBlog(blogId: string, content: string, title: string) {
-  console.log(`Updating blog with id: ${blogId}`);
   try {
     const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/s3blogs/${blogId}`, { content, title });
     return response.status === 200;
@@ -83,7 +86,6 @@ export async function getBlogsByUsername(username: string) {
 }
 
 export async function deleteBlog(blogId: string) {
-  console.log(`Deleting blog with id: ${blogId}`);
   try {
     const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/s3blogs/${blogId}`);
     return response.status === 200;
@@ -95,13 +97,12 @@ export async function deleteBlog(blogId: string) {
 
 export async function getUsers() {
   try {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users`);
-    console.log(`returning data: ${response.data.length} users`);
-    return response.data.map((user: any) => ({
+    const response = await axios.get<User[]>(`${process.env.NEXT_PUBLIC_API_URL}/api/users`);
+    return response.data.map((user) => ({
       _id: user._id.toString(),
-      username: user.username as string,
-      name: user.name as string,
-      email: user.email as string
+      username: user.username,
+      name: user.name,
+      email: user.email
     }));
   } catch (error) {
     console.error('Error fetching users:', error);

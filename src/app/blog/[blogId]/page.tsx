@@ -1,14 +1,10 @@
-'use client';
-
 import { getBlog } from '../../../lib/handleRequest';
 import { marked } from 'marked';
 
 export default async function BlogPage({ params }: { params: { blogId: string } }) {
-  console.log('BlogPage rendered with blogId:', params.blogId);
   try {
     const blogContent = await getBlog(params.blogId);
-    console.log('Blog content received:', blogContent ? 'Yes' : 'No');
-    
+
     if (!blogContent) {
       throw new Error('Blog content not found');
     }
@@ -23,7 +19,6 @@ export default async function BlogPage({ params }: { params: { blogId: string } 
       </div>
     );
   } catch (error) {
-    console.error('Error rendering blog page:', error);
     return (
       <div className="flex flex-col">
         <div className="container mx-auto mt-8 px-4">

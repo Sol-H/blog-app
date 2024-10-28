@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import SessionProviderWrapper from "./SessionProviderWrapper";
-import { Session } from "next-auth";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import Navbar from "@/components/navbar";
@@ -33,7 +32,6 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession(authOptions);
   const users = await getUsers();
-  console.log(users);
 
   return (
     <html lang="en" className="dark">
