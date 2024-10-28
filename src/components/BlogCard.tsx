@@ -31,7 +31,7 @@ export default function BlogCard({ title, content, date, blogLocationId, showEdi
   };
 
   return (
-    <div className="flex flex-col m-4 p-4 rounded-md hover:cursor-pointer dark:bg-slate-800 dark:hover:bg-slate-700 bg-slate-400 hover:bg-slate-500" onClick={handleBlogClick}>
+    <div className="flex flex-col m-4 p-4 rounded-md hover:cursor-pointer dark:bg-slate-800 dark:hover:bg-slate-700 bg-slate-100 hover:bg-slate-200" onClick={handleBlogClick}>
       <div className="flex flex-col mb-2">
         <div className="flex justify-between">
           {showEditButton && (
