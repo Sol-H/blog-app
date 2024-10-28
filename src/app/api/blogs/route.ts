@@ -3,6 +3,8 @@ import clientPromise from "@/lib/db";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/auth.config";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const client = await clientPromise;
@@ -17,4 +19,3 @@ export async function GET() {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
-

@@ -54,7 +54,7 @@ export default function Dashboard() {
     const username = session.user?.username || '';
     return (
       <div className="flex flex-col">
-        <h1 className="text-3xl text-center mt-6 mb-10">{session.user?.name?.split(' ')[0]}&apos;s Blogs</h1>
+        <h1 className="text-3xl text-center mt-6 mb-10">Your Blogs</h1>
         <Link href={`/user/${username}`} className="text-center mb-4 text-blue-500 hover:text-blue-700">
           View Public Page
         </Link>

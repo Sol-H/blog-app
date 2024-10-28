@@ -83,6 +83,15 @@ export default function CreateBlogPage() {
                 id="content"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = e.currentTarget.selectionStart;
+                    const end = e.currentTarget.selectionEnd;
+                    const newValue = content.substring(0, start) + '\t' + content.substring(end);
+                    setContent(newValue);
+                  }
+                }}
                 className="w-full p-2 border rounded h-64 dark:bg-slate-800 dark:border-slate-600"
               />
             </div>
