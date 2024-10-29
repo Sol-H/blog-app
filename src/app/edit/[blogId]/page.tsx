@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import { getBlog, updateBlog } from '../../../lib/handleRequest';
 import { marked } from 'marked';
+import { configureMarked } from '@/lib/markdownConfig';
 
 export default function EditBlogPage({ params }: { params: { blogId: string } }) {
   const [content, setContent] = useState('');
@@ -54,6 +55,7 @@ export default function EditBlogPage({ params }: { params: { blogId: string } })
 
   useEffect(() => {
     const updatePreview = async () => {
+      configureMarked();  
       const formattedContent = `# ${title}\n\n${content}`;
       const renderedContent = await marked(formattedContent);
       setPreview(renderedContent);

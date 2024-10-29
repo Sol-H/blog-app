@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { createBlog } from '../../lib/handleRequest';
 import LoginButton from "@/components/loginButton";
 import { marked } from 'marked';
+import { configureMarked } from '../../lib/markdownConfig';
 
 function SignInMessage() {
   return (
@@ -26,6 +27,7 @@ export default function CreateBlogPage() {
 
   useEffect(() => {
     const updatePreview = async () => {
+      configureMarked();
       const formattedContent = `# ${title}\n\n${content}`;
       const renderedContent = await marked(formattedContent);
       setPreview(renderedContent);

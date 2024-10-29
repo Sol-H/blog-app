@@ -1,5 +1,6 @@
 import { getBlog } from '../../../lib/handleRequest';
 import { marked } from 'marked';
+import { configureMarked } from '@/lib/markdownConfig';
 
 export default async function BlogPage({ params }: { params: { blogId: string } }) {
   try {
@@ -9,6 +10,7 @@ export default async function BlogPage({ params }: { params: { blogId: string } 
       throw new Error('Blog content not found');
     }
 
+    configureMarked();
     const htmlContent = marked(blogContent.content);
 
     return (

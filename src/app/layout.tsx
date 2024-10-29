@@ -8,6 +8,7 @@ import Navbar from "@/components/navbar";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/auth.config";
 import { Analytics } from "@vercel/analytics/react";
+import "./prism-theme.css";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
